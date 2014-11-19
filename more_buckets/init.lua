@@ -1,9 +1,11 @@
 -- More_buckets from Ataron
+-- Last modification on Wednesday, November 19th by Mg
 
 local LIQUID_MAX = 8  --The number of water levels when liquid_finite is enabled
 
 bucket = {}
 bucket.liquids = {}
+more_buckets = {}
 
 local function check_protection(pos, name, text)
 	if minetest.is_protected(pos, name) then
@@ -115,9 +117,11 @@ end
 -- Test
 
 function more_buckets.register_bucket(subname, recipeitem, description, inventory_image, sounds)
+
 	minetest.register_craftitem(":more_buckets:bucket_" .. subname, {
 		description = description,
-		inventory_image = images,
+		inventory_image = inventory_image[1],
+		stack_max = 1,
 		liquids_pointable = true,
 		sounds = sounds,
 		on_use = function(itemstack, user, pointed_thing)
@@ -147,8 +151,8 @@ function more_buckets.register_bucket(subname, recipeitem, description, inventor
 						metadata = tostring(node.param2)})
 			end
 		end,
-
-
+	})
+	
 	minetest.register_craft({
 		output = 'more_buckets:bucket_' .. subname,
 		recipe = {
@@ -157,12 +161,16 @@ function more_buckets.register_bucket(subname, recipeitem, description, inventor
 			{ "", recipeitem, ""},
 		},
 	})
-	})
 end
 	
 more_buckets.register_bucket("copper", "default:copper_ingot",
 		"Copper Bucket",
 		{"copper_bucket.png"},
+		default.node_sound_wood_defaults())
+		
+more_buckets.register_bucket("gold", "default:gold_ingot",
+		"Gold test bucket",
+		{"gold_bucket.png"},
 		default.node_sound_wood_defaults())
 		
 if minetest.get_modpath("moreores") ~= nil then
