@@ -70,9 +70,6 @@ function more_buckets.register_bucket(subname, parameters)
 				liquids_pointable = true,
 				sounds = parameters.sounds,
 				on_place = function(itemstack, user, pointed_thing)
-					print("using!")
-					table.foreach(pointed_thing, print)
-					
 					local place_liquid = function(pos, node, source, flowing, fullness)
 						if check_protection(pos,
 								user and user:get_player_name() or "",
@@ -126,8 +123,6 @@ function more_buckets.register_bucket(subname, parameters)
 					flowing = v:split("_")[1].."flowing"
 					
 					if ndef and ndef.buildable_to == true then
-						print("b::")
-						print(ndef.buildable_to)
 						-- buildable; replace the node
 						place_liquid(pointed_thing.under, node,
 								v, flowing, fullness)
