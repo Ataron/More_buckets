@@ -5,6 +5,7 @@ local LIQUID_MAX = 8  --The number of water levels when liquid_finite is enabled
 
 more_buckets = {}
 more_buckets.liquids = {}
+--more_buckets.bucket_def = {}
 
 more_buckets.register_liquid = function(parameters)
 	if parameters.source_name == nil or parameters.filling_texture == nil then
@@ -12,12 +13,13 @@ more_buckets.register_liquid = function(parameters)
 		return
 	end
 	
-	more_buckets.liquids[parameters.source_name] = parameters.filling_texture
+	more_buckets.liquids[parameters.source_name] = {}
+	more_buckets.liquids[parameters.source_name].filling_texture = parameters.filling_texture
+	more_buckets.liquids[parameters.source_name].buckets = {}
 	
 end
 
-more_buckets.register_liquid({source_name = "default:water_source",filling_texture = "water_fill.png"})
-more_buckets.register_liquid({source_name = "default:lava_source",filling_texture = "lava_fill.png"})
+dofile(minetest.get_modpath("more_buckets").."/liquids.lua")
 
 local function check_protection(pos, name, text)
 	if minetest.is_protected(pos, name) then
@@ -57,15 +59,20 @@ function more_buckets.register_bucket(subname, parameters)
 		parameters.sounds = default.node_sound_wood_default()
 	end
 	
+	--more_buckets.bucket_def[subname] = {}
+	--more_buckets.bucket_def[subname].liquids = parameters.liquids
+	
 	for _, v in pairs(parameters.liquids) do
 	
 		if more_buckets.liquids[v] == nil then
 			minetest.log("error","[more_buckets] Unknown liquid "..v.." for more_buckets")
 		else	
 			
+			more_buckets.liquids[v].buckets[subname] = true
+			
 			minetest.register_craftitem(":more_buckets:bucket_" .. subname.."_"..v:split(":")[2]:split("_")[1], {
-				description = parameters.description,
-				inventory_image = parameters.inventory_image,
+				description = v:split(":")[2]:split("_")[1].." "..parameters.description,
+				inventory_image = parameters.inventory_image.."^"..more_buckets.liquids[v].filling_texture,
 				stack_max = 1,
 				liquids_pointable = true,
 				sounds = parameters.sounds,
@@ -126,6 +133,7 @@ function more_buckets.register_bucket(subname, parameters)
 						-- buildable; replace the node
 						place_liquid(pointed_thing.under, node,
 								v, flowing, fullness)
+						return ItemStack({name = "more_buckets:bucket_"..subname.."_empty"})
 					else
 						-- not buildable to; place the liquid above
 						-- check if the node above can be replaced
@@ -134,9 +142,7 @@ function more_buckets.register_bucket(subname, parameters)
 							place_liquid(pointed_thing.above,
 									node, v,
 									flowing, fullness)
-						else
-							-- do not remove the bucket with the liquid
-							return
+							return ItemStack({name = "more_buckets:bucket_"..subname.."_empty"})
 						end
 					end
 				end
@@ -153,13 +159,19 @@ function more_buckets.register_bucket(subname, parameters)
 				liquids_pointable = true,
 				sounds = parameters.sounds,
 				on_use = function(itemstack, user, pointed_thing)
-					--[[ Must be pointing to node
+					-- Must be pointing to node
 					if pointed_thing.type ~= "node" then
 						return
 					end
 					-- Check if pointing to a liquid source
-					node = minetest.get_node(pointed_thing.under)]]
+					node = minetest.get_node(pointed_thing.under)
 					
+					if more_buckets.liquids[node.name] and more_buckets.liquids[node.name].buckets[subname] == true then
+						minetest.set_node(pointed_thing.under,{name = "air"})
+						return ItemStack({name = "more_buckets:bucket_"..subname.."_"..node.name:split(":")[2]:split("_")[1]})
+					else
+						return
+					end
 				end,
 		})
 	end
@@ -167,7 +179,7 @@ function more_buckets.register_bucket(subname, parameters)
 	-- You can register a bucket without any craft
 	if parameters.recipeitem ~= nil and parameters.recipeitem ~= "" and minetest.registered_items[parameters.recipeitem] then
 		minetest.register_craft({
-			output = 'more_buckets:bucket_' .. subname,
+			output = 'more_buckets:bucket_' .. subname .. "_empty",
 			recipe = {
 				{ "", "", ""},
 				{parameters.recipeitem, "", parameters.recipeitem},
@@ -177,64 +189,5 @@ function more_buckets.register_bucket(subname, parameters)
 	end
 end
 
-more_buckets.register_bucket("wood",{
-	recipeitem = "default:wood",
-	description = "Wood Bucket",
-	inventory_image = "wood_bucket.png",
-	liquids = {"default:water_source"},
-	sounds = default.node_sound_wood_defaults()
-})
 
-more_buckets.register_bucket("stone",{
-	recipeitem = "default:stone",
-	description = "Stone Bucket",
-	inventory_image = "stone_bucket.png",
-	liquids = {"default:water_source"},
-	sounds = default.node_sound_wood_defaults()
-})
-
-more_buckets.register_bucket("bronze",{
-	recipeitem = "default:bronze_ingot",
-	description = "Bronze Bucket",
-	inventory_image = "bronze_bucket.png",
-	liquids = {"default:water_source"},
-	sounds = default.node_sound_wood_defaults()
-})
-	
-more_buckets.register_bucket("copper", {
-		recipeitem = "default:copper_ingot",
-		description = "Copper Bucket",
-		inventory_image = "copper_bucket.png",
-		liquids = {"default:water_source","default:lava_source"},
-		sounds = default.node_sound_wood_defaults()
-})
-		
-more_buckets.register_bucket("gold",{
-		recipeitem = "default:gold_ingot",
-		description = "Gold test bucket",
-		inventory_image = "gold_bucket.png",
-		liquids = {"default:lava_source"},
-		sounds = default.node_sound_wood_defaults()
-})
-
-if minetest.get_modpath("moreores") ~= nil then
-
-		
-	more_buckets.register_bucket("tin",{
-		recipeitem = "moreores:tin_ingot",
-		description = "Tin Bucket",
-		inventory_image = "tin_bucket.png",
-		liquids = {"default:water_source"},
-		sounds = default.node_sound_wood_defaults()
-	})
-	
-		more_buckets.register_bucket("silver",{
-		recipeitem = "moreores:silver_ingot",
-		description = "Silver Bucket",
-		inventory_image = "silver_bucket.png",
-		liquids = {"default:water_source"},
-		sounds = default.node_sound_wood_defaults()
-	})
-	
-	return
-end
+dofile(minetest.get_modpath("more_buckets").."/buckets.lua")
