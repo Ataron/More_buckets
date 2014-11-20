@@ -1,5 +1,5 @@
--- More_buckets from Ataron
--- Last modification on Wednesday, November 19th by Mg
+-- More_buckets from Ataron and Mg
+-- Last modification on Thursday, November 20th by Mg and Ataron
 
 local LIQUID_MAX = 8  --The number of water levels when liquid_finite is enabled
 
@@ -176,6 +176,14 @@ function more_buckets.register_bucket(subname, parameters)
 		})
 	end
 end
+
+more_buckets.register_bucket("bronze",{
+	recipeitem = "moreores:bronze_ingot",
+	description = "Bronze Bucket",
+	inventory_image = "bronze_bucket.png",
+	liquids = {"default:water_source"},
+	sounds = default.node_sound_wood_defaults()
+})
 	
 more_buckets.register_bucket("copper", {
 		recipeitem = "default:copper_ingot",
@@ -200,6 +208,14 @@ if minetest.get_modpath("moreores") ~= nil then
 		recipeitem = "moreores:tin_ingot",
 		description = "Tin Bucket",
 		inventory_image = "tin_bucket.png",
+		liquids = {"default:water_source"},
+		sounds = default.node_sound_wood_defaults()
+	})
+	
+		more_buckets.register_bucket("silver",{
+		recipeitem = "moreores:silver_ingot",
+		description = "Silver Bucket",
+		inventory_image = "silver_bucket.png",
 		liquids = {"default:water_source"},
 		sounds = default.node_sound_wood_defaults()
 	})
