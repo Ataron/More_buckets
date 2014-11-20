@@ -177,8 +177,24 @@ function more_buckets.register_bucket(subname, parameters)
 	end
 end
 
+more_buckets.register_bucket("wood",{
+	recipeitem = "default:wood",
+	description = "Wood Bucket",
+	inventory_image = "wood_bucket.png",
+	liquids = {"default:water_source"},
+	sounds = default.node_sound_wood_defaults()
+})
+
+more_buckets.register_bucket("stone",{
+	recipeitem = "default:stone",
+	description = "Stone Bucket",
+	inventory_image = "stone_bucket.png",
+	liquids = {"default:water_source"},
+	sounds = default.node_sound_wood_defaults()
+})
+
 more_buckets.register_bucket("bronze",{
-	recipeitem = "moreores:bronze_ingot",
+	recipeitem = "default:bronze_ingot",
 	description = "Bronze Bucket",
 	inventory_image = "bronze_bucket.png",
 	liquids = {"default:water_source"},
