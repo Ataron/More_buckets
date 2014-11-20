@@ -41,6 +41,48 @@ more_buckets.register_bucket("gold",{
 		sounds = default.node_sound_wood_defaults()
 })
 
+more_buckets.register_bucket("glass", {
+	recipeitem = "default:glass",
+	description = "Glass bucket",
+	inventory_image = "bucket.png", -- TODO
+	liquids = {"default:water_source"}
+})
+
+more_buckets.register_bucket("mese", {
+	recipitem = "default:mese_crystal",
+	description = "Mese bucket",
+	inventory_image = "bucket.png", -- TODO
+	liquids = {"default:water_source", "default:lava_source"}
+})
+
+more_buckets.register_bucket("tree", {
+	recipitem = "default:tree",
+	description = "Tree bucket",
+	inventory_image = "bucket.png", -- TODO
+	liquids = {"default:water_source"}
+})
+
+more_buckets.register_bucket("obsidian", {
+	recipitem = "default:obsidian",
+	description = "Obsidian bucket",
+	inventory_image = "bucket.png", -- TODO
+	liquids = {"default:water_source", "default:lava_source"}
+})
+
+more_buckets.register_bucket("cobble", {
+	recipitem = "default:cobble",
+	description = "Cobble bucket",
+	inventory_image = "bucket.png", -- TODO
+	liquids = {"default:water_source", "default:lava_source"}
+})
+
+more_buckets.register_bucket("mese", {
+	recipitem = "default:mese_crystal",
+	description = "Mese bucket",
+	inventory_image = "bucket.png", -- TODO
+	liquids = {"default:water_source", "default:lava_source"}
+})
+
 if minetest.get_modpath("moreores") ~= nil then		
 	more_buckets.register_bucket("tin",{
 		recipeitem = "moreores:tin_ingot",

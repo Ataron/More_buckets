@@ -2,6 +2,7 @@
 -- Last modification on Thursday, November 20th by Mg and Ataron
 
 local LIQUID_MAX = 8  --The number of water levels when liquid_finite is enabled
+local CREATIVE_HIDDEN = 1 --Only empty buckets are shown in creative inventory ; 1 = only empty ones ; 0 = all
 
 more_buckets = {}
 more_buckets.liquids = {}
@@ -13,6 +14,7 @@ more_buckets.register_liquid = function(parameters)
 		return
 	end
 	
+	minetest.log("action","[more_buckets] Registering liquid "..parameters.source_name)
 	more_buckets.liquids[parameters.source_name] = {}
 	more_buckets.liquids[parameters.source_name].filling_texture = parameters.filling_texture
 	more_buckets.liquids[parameters.source_name].buckets = {}
@@ -56,7 +58,7 @@ function more_buckets.register_bucket(subname, parameters)
 	elseif parameters.liquids == nil then
 		parameters.liquids = {"default:water"}
 	elseif parameters.sounds == nil then
-		parameters.sounds = default.node_sound_wood_default()
+		parameters.sounds = default.node_sound_wood_defaults()
 	end
 	
 	--more_buckets.bucket_def[subname] = {}
@@ -71,11 +73,12 @@ function more_buckets.register_bucket(subname, parameters)
 			more_buckets.liquids[v].buckets[subname] = true
 			
 			minetest.register_craftitem(":more_buckets:bucket_" .. subname.."_"..v:split(":")[2]:split("_")[1], {
-				description = v:split(":")[2]:split("_")[1].." "..parameters.description,
+				description = parameters.description.."containing "..v:split(":")[2]:split("_")[1],
 				inventory_image = parameters.inventory_image.."^"..more_buckets.liquids[v].filling_texture,
 				stack_max = 1,
 				liquids_pointable = true,
 				sounds = parameters.sounds,
+				groups = {not_in_creative_inventory = CREATIVE_HIDDEN},
 				on_place = function(itemstack, user, pointed_thing)
 					local place_liquid = function(pos, node, source, flowing, fullness)
 						if check_protection(pos,
@@ -133,7 +136,7 @@ function more_buckets.register_bucket(subname, parameters)
 						-- buildable; replace the node
 						place_liquid(pointed_thing.under, node,
 								v, flowing, fullness)
-						return ItemStack({name = "more_buckets:bucket_"..subname.."_empty"})
+						return ItemStack({name = "more_buckets:bucket_"..subname.."_empty", count = user:get_wielded_item():get_count()})
 					else
 						-- not buildable to; place the liquid above
 						-- check if the node above can be replaced
@@ -142,7 +145,7 @@ function more_buckets.register_bucket(subname, parameters)
 							place_liquid(pointed_thing.above,
 									node, v,
 									flowing, fullness)
-							return ItemStack({name = "more_buckets:bucket_"..subname.."_empty"})
+							return ItemStack({name = "more_buckets:bucket_"..subname.."_empty", count = user:get_wielded_item():get_count()})
 						end
 					end
 				end
