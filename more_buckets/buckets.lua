@@ -44,43 +44,50 @@ more_buckets.register_bucket("gold",{
 more_buckets.register_bucket("glass", {
 	recipeitem = "default:glass",
 	description = "Glass bucket",
-	inventory_image = "bucket.png", -- TODO
+	inventory_image = "glass_bucket.png",
 	liquids = {"default:water_source"}
 })
 
 more_buckets.register_bucket("mese", {
 	recipitem = "default:mese_crystal",
 	description = "Mese bucket",
-	inventory_image = "bucket.png", -- TODO
+	inventory_image = "mese_bucket.png",
 	liquids = {"default:water_source", "default:lava_source"}
 })
 
 more_buckets.register_bucket("tree", {
 	recipitem = "default:tree",
 	description = "Tree bucket",
-	inventory_image = "bucket.png", -- TODO
+	inventory_image = "tree_bucket.png",
 	liquids = {"default:water_source"}
 })
 
 more_buckets.register_bucket("obsidian", {
 	recipitem = "default:obsidian",
 	description = "Obsidian bucket",
-	inventory_image = "bucket.png", -- TODO
+	inventory_image = "obsidian_bucket.png",
 	liquids = {"default:water_source", "default:lava_source"}
 })
 
 more_buckets.register_bucket("cobble", {
 	recipitem = "default:cobble",
 	description = "Cobble bucket",
-	inventory_image = "bucket.png", -- TODO
+	inventory_image = "cobble_bucket.png",
 	liquids = {"default:water_source", "default:lava_source"}
 })
 
-more_buckets.register_bucket("mese", {
-	recipitem = "default:mese_crystal",
-	description = "Mese bucket",
-	inventory_image = "bucket.png", -- TODO
+more_buckets.register_bucket("diamond", {
+	recipitem = "default:diamond",
+	description = "Diamond bucket",
+	inventory_image = "diamond_bucket.png",
 	liquids = {"default:water_source", "default:lava_source"}
+})
+
+more_buckets.register_bucket("coal", {
+	recipitem = "default:coal_lump",
+	description = "Coal bucket",
+	inventory_image = "coal_bucket.png",
+	liquids = {"default:water_source"}
 })
 
 if minetest.get_modpath("moreores") ~= nil then		
