@@ -107,3 +107,12 @@ if minetest.get_modpath("moreores") ~= nil then
 	})
 	return
 end
+
+if minetest.get_modpath("quartz") ~= nil then
+	ore_buckets.register_bucket("quartz",{
+		recipeitem = "quartz:quartz_crystal",
+		description = "Quartz bucket",
+		inventory_image = "quartz_bucket.png",
+		liquids = {"default:water_source","default:lava_source"},
+	})
+end
